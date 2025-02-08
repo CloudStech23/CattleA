@@ -1,18 +1,25 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Ionicons } from "@expo/vector-icons"; // For icons
-import Home from "./Components/Home"; // Correct import path
+// import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+// import { Ionicons } from "@expo/vector-icons"; // For icons
+// import Home from "./Components/Landing/Home"; // Correct import path
 import Registration from "./Components/User/UserRagistration";
+// import HomeHeader from "./Components/HeaderComponent/HomeHeader";
+// import CustomHeader from "./Components/HeaderComponent/CustomHeader";
 // import UserRegiAadhar from "./Components/User/UserRegiAadhar";
+// import { View, Text } from "react-native";
+import HomeTabNavigator from "./Components/TabNavigatorComp/HomeTabNavigator";
+import { createStackNavigator } from "@react-navigation/stack";
+import CustomHeader from "./Components/HeaderComponent/CustomHeader";
+import Helpdesk from "./App/Help/HelpDesk";
 
-
-const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Tab.Navigator
+      {/* <Tab.Navigator
+        initialRouteName="Home"
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
@@ -27,10 +34,37 @@ export default function App() {
           tabBarInactiveTintColor: "gray",
         })}
       >
-        <Tab.Screen name="Home" component={Home} />
-        <Tab.Screen name="Registration" component={Registration} />
-        {/* <Tab.Screen name="Aadhar" component={UserRegiAadhar} /> */}
-      </Tab.Navigator>
+         <Tab.Screen
+          name="Home"
+          component={Home}
+          options={{
+             header: () => <HomeHeader />,
+          }}
+        />
+         <Tab.Screen
+          name="Registration"
+          component={Registration}
+          options={{
+            tabBarStyle: { display: "none" },
+            header: () => <CustomHeader title="Registration" />,
+          }}
+        />
+      </Tab.Navigator> */}
+      <Stack.Navigator>
+        <Stack.Screen
+          name="HomeTabs"
+          component={HomeTabNavigator}
+          options={{ headerShown: false }} // Hide header for tab navigator
+        />
+
+        {/* Add Registration screen */}
+        <Stack.Screen
+          name="Registration"
+          component={Registration}
+          options={{ title: "User Registration", header:()=><CustomHeader title="Registration"/> }} // Example of custom title
+        />
+        <Stack.Screen name='Helpdesk' component={Helpdesk} options={{header:()=><CustomHeader title="Helpdesk"/>}}/>
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }

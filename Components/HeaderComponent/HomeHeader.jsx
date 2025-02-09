@@ -16,7 +16,7 @@ const HomeHeader = () => {
         />
       </TouchableOpacity>
       <Text style={styles.headerTitle}>Welcome &#123;user&#125;</Text>
-      <TouchableOpacity style={styles.notificationIcon}>
+      <TouchableOpacity style={styles.notificationIcon} onPress={()=> navigator.navigate('Notification')}>
         <Ionicons name="notifications-outline" size={30} color="#fff" />
       </TouchableOpacity>
       <TouchableOpacity style={styles.Registration}>

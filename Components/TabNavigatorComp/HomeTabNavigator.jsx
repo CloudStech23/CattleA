@@ -2,7 +2,7 @@ import React from "react";
 // import { View, Text } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
-import Home from "../Landing/Home";
+import Home from "../../App/Landing/Home";
 import HomeHeader from "../HeaderComponent/HomeHeader";
 // import Registration from "../User/UserRagistration";
 import CustomHeader from "../HeaderComponent/CustomHeader";

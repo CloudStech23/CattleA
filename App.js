@@ -15,6 +15,7 @@ import Helpdesk from "./App/Help/HelpDesk";
 import LoginPage from "./Components/User/LoginPage";
 import Home from "./Components/Landing/Home";
 import UserRegiAadhar from "./Components/User/UserRegiAadhar";
+import Notification from "./App/Notification/Notification";
 
 const Stack = createStackNavigator();
 
@@ -59,6 +60,11 @@ export default function App() {
             name="LoginPage"
             component={LoginPage}
             options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Notification"
+            component={Notification}
+            options={{ header:()=> <CustomHeader title="Notifications" /> }}
           />
 
           <Stack.Screen

@@ -12,13 +12,17 @@ import HomeTabNavigator from "./Components/TabNavigatorComp/HomeTabNavigator";
 import { createStackNavigator } from "@react-navigation/stack";
 import CustomHeader from "./Components/HeaderComponent/CustomHeader";
 import Helpdesk from "./App/Help/HelpDesk";
+import LoginPage from "./Components/User/LoginPage";
+import Home from "./Components/Landing/Home";
+import UserRegiAadhar from "./Components/User/UserRegiAadhar";
 
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <NavigationContainer>
-      {/* <Tab.Navigator
+    <React.StrictMode>
+      <NavigationContainer>
+        {/* <Tab.Navigator
         initialRouteName="Home"
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
@@ -50,21 +54,41 @@ export default function App() {
           }}
         />
       </Tab.Navigator> */}
-      <Stack.Navigator>
-        <Stack.Screen
-          name="HomeTabs"
-          component={HomeTabNavigator}
-          options={{ headerShown: false }} // Hide header for tab navigator
-        />
+        <Stack.Navigator initialRouteName="LoginPage">
+          <Stack.Screen
+            name="LoginPage"
+            component={LoginPage}
+            options={{ headerShown: false }}
+          />
 
-        {/* Add Registration screen */}
-        <Stack.Screen
-          name="Registration"
-          component={Registration}
-          options={{ title: "User Registration", header:()=><CustomHeader title="Registration"/> }} // Example of custom title
-        />
-        <Stack.Screen name='Helpdesk' component={Helpdesk} options={{header:()=><CustomHeader title="Helpdesk"/>}}/>
-      </Stack.Navigator>
-    </NavigationContainer>
+          <Stack.Screen
+            name="HomeTabs"
+            component={HomeTabNavigator}
+            options={{ headerShown: false }} // Hide header for tab navigator
+          />
+
+          <Stack.Screen
+            name="UserRegiAadhar"
+            component={UserRegiAadhar}
+            options={{ header: () => <CustomHeader title="Aadhar Registration" /> }}
+          />
+
+          {/* Add Registration screen */}
+          <Stack.Screen
+            name="Registration"
+            component={Registration}
+            options={{
+              title: "User Registration",
+              header: () => <CustomHeader title="Registration" />,
+            }} // Example of custom title
+          />
+          <Stack.Screen
+            name="Helpdesk"
+            component={Helpdesk}
+            options={{ header: () => <CustomHeader title="Helpdesk" /> }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </React.StrictMode>
   );
 }

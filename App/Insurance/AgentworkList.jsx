@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text } from "react-native";
-import WorklistTabnavigator from "../Components/TabNavigatorComp/WorklistTabnavigator";
+import WorklistTabnavigator from "../../Components/TabNavigatorComp/WorklistTabnavigator";
 
 function AgentworkList() {
   return (

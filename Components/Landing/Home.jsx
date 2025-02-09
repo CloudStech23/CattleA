@@ -1,6 +1,16 @@
 import React, { useRef } from "react";
-import { View, Text, Dimensions, Image, StyleSheet,ScrollView } from "react-native";
+import { View, Text, Dimensions, Image, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
 import Carousel from "react-native-reanimated-carousel";
+import { Ionicons } from "@expo/vector-icons";
+import {
+  configureReanimatedLogger,
+  ReanimatedLogLevel,
+} from 'react-native-reanimated';
+
+configureReanimatedLogger({
+  level: ReanimatedLogLevel.warn,
+  strict: false, // Reanimated runs in strict mode by default
+});
 
 const { width, height } = Dimensions.get("window");
 
@@ -25,6 +35,15 @@ const images = [
   },
 ];
 
+const Pages = [
+  { id: 1, link: "view enrollment clicked", logo: "search", title: "View Enrollment" },
+  { id: 2, link: "Register Gaushala clicked", logo: "add-circle", title: "Register Gaushala" },
+  { id: 3, link: "verify enrollment clicked", logo: "checkmark-circle", title: "Verify Enrollment" },
+  { id: 4, link: "rx prescription clicked", logo: "medkit", title: "Rx Prescription" },
+  { id: 5, link: "Insurance clicked", logo: "shield-checkmark", title: "Insurance" },
+  { id: 6, link: "Ownership Transfer clicked", logo: "swap-horizontal", title: "Ownership Trf" },
+];
+
 export default function Home() {
   const carouselRef = useRef(null);
 
@@ -36,33 +55,29 @@ export default function Home() {
 
   return (
     <ScrollView style={styles.scrollContainer} contentContainerStyle={{ flexGrow: 1 }}>
+      <View style={styles.container}>
+        <Carousel
+          ref={carouselRef}
+          loop
+          width={width}
+          height={height * 0.3} // Height adjustment
+          autoPlay
+          autoPlayInterval={3000}
+          data={images}
+          scrollAnimationDuration={800}
+          renderItem={renderItem}
+        />
 
-    <View style={styles.container}>
-      <Carousel
-        ref={carouselRef}
-        loop
-        width={width}
-        height={height * 0.3} // Height adjustment
-        autoPlay
-        autoPlayInterval={3000}
-        data={images}
-        scrollAnimationDuration={800}
-        renderItem={renderItem}
-      />
-
-      <View style={styles.gridContainer}>
-        {[...Array(3)].map((_, rowIndex) => (
-          <View key={rowIndex} style={styles.row}>
-            <View style={styles.box}>
-              <Text style={styles.boxText}>Column 1</Text>
-            </View>
-            <View style={styles.box}>
-              <Text style={styles.boxText}>Column 2</Text>
-            </View>
-          </View>
-        ))}
+        {/* Dynamic Grid Layout */}
+        <View style={styles.gridContainer} >
+          {Pages.map((item) => (
+            <TouchableOpacity key={item.id} style={styles.box} onPress={() => alert(item.link)}>
+              <Ionicons name={item.logo} size={32} color="white" />
+              <Text style={styles.boxText}>{item.title}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
       </View>
-    </View>
     </ScrollView>
   );
 }
@@ -73,6 +88,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginTop: "5%",
+  },
+  scrollContainer: {
+    flexGrow: 1,
+    marginBottom: 70, // Adjust for bottom spacing
   },
   itemContainer: {
     justifyContent: "center",
@@ -90,26 +109,25 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
   gridContainer: {
-    padding: 10,
-    flex: 1,
-    width: "90%",
-  },
-  row: {
     flexDirection: "row",
-    marginVertical: 5,
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    alignSelf: "center", // Ensures the grid doesn't expand unnecessarily
+    width: "85%",
+    marginTop: 10, // Adjust as needed
   },
   box: {
-    flex: 1,
+    width: "49%",
     backgroundColor: "blue",
     padding: 20,
-    margin: 5,
+    marginVertical: 5,
     alignItems: "center",
-    height: 150, // Fixed height issue
     justifyContent: "center",
-    borderRadius: 10,
+    borderRadius: 5,
   },
   boxText: {
     color: "white",
     fontWeight: "bold",
+    marginTop: 5,
   },
 });

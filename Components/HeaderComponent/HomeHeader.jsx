@@ -20,7 +20,7 @@ const HomeHeader = () => {
         <Ionicons name="notifications-outline" size={30} color="#fff" />
       </TouchableOpacity>
       <TouchableOpacity style={styles.Registration}>
-        <Ionicons onPress={()=> navigator.navigate('Registration')} name="exit-outline" size={30} color="#fff" />
+        <Ionicons onPress={()=> navigator.navigate('LoginPage')} name="exit-outline" size={30} color="#fff" />
       </TouchableOpacity>
     </View>
   );

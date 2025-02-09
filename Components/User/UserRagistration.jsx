@@ -9,12 +9,14 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { useNavigation } from "@react-navigation/native";
 
 
 const RegistrationScreen = () => {
   const [userType, setUserType] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+  const navigation = useNavigation();
 
   const handleGetOtp = () => {
     if (mobileNumber.length === 10) {
@@ -32,9 +34,10 @@ const RegistrationScreen = () => {
     }
   };
 
-  const handleNext = () => {
-    Alert.alert("Next Step", "Proceeding to the next step!");
-  };
+  // const handleNext = () => {
+  //   navigation.navigate("UserRegiAadhar");
+  //   // Alert.alert("Next Step", "Proceeding to the next step!");
+  // };
 
   return (
     <View style={styles.container}>
@@ -133,7 +136,7 @@ const RegistrationScreen = () => {
         <Text style={styles.buttonText}>Verify</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
+      <TouchableOpacity style={styles.nextButton} onPress={()=> navigation.navigate('UserRegiAadhar')}>
         <Text style={styles.nextButtonText}>Next →</Text>
       </TouchableOpacity>
     </View>

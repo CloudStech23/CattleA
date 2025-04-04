@@ -3,7 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 // import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 // import { Ionicons } from "@expo/vector-icons"; // For icons
 // import Home from "./Components/Landing/Home"; // Correct import path
-import Registration from "./Components/User/UserRagistration";
+import Registration from "./App/User/UserRagistration";
 // import HomeHeader from "./Components/HeaderComponent/HomeHeader";
 // import CustomHeader from "./Components/HeaderComponent/CustomHeader";
 // import UserRegiAadhar from "./Components/User/UserRegiAadhar";
@@ -12,9 +12,9 @@ import HomeTabNavigator from "./Components/TabNavigatorComp/HomeTabNavigator";
 import { createStackNavigator } from "@react-navigation/stack";
 import CustomHeader from "./Components/HeaderComponent/CustomHeader";
 import Helpdesk from "./App/Help/HelpDesk";
-import LoginPage from "./Components/User/LoginPage";
-import Home from "./Components/Landing/Home";
-import UserRegiAadhar from "./Components/User/UserRegiAadhar";
+import LoginPage from "./App/User/LoginPage";
+// import Home from "./Components/Landing/Home";
+import UserRegiAadhar from "./App/User/UserRegiAadhar";
 import Notification from "./App/Notification/Notification";
 
 const Stack = createStackNavigator();

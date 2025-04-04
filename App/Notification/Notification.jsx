@@ -1,54 +1,73 @@
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 
 function Notification() {
   const NotificationData1 = [
     {
       id: 1,
-      icon: "",
-      desc: "",
+      icon: "warning",
+      desc: "Vaccination Due",
     },
     {
       id: 2,
-      icon: "",
-      desc: "",
+      icon: "medkit",
+      desc: "Health Check Required",
     },
+     
   ];
 
   const NotificationData2 = [
     {
       id: 1,
-      icon: "checkcircle",
+      icon: "checkmark-circle-outline",
       desc: "kajdljffllajl",
     },
     {
       id: 2,
-      icon: "user-plus",
+      icon: "person-add",
       desc: "kadjadfaf",
     },
     {
       id: 3,
-      icon: "add-circle",
+      icon: "time",
       desc: "aksjdfja",
     },
   ];
   return (
     <View style={styles.container}>
       <View style={styles.subContainer1}>
+        <View style={styles.heading}>
+          <Text style={{ fontSize: 19, fontWeight: "bold", color: "#f20a0a" }}>
+            Action Required
+          </Text>
+          <View
+            style={{
+              paddingHorizontal: 6,
+              paddingVertical: 2,
+              backgroundColor: "#fbbacad6",
+
+              borderRadius: 5,
+            }}
+          >
+            <Text style={{ color: "red" }}>3 Pending</Text>
+          </View>
+        </View>
         <ScrollView>
-          <View style={styles.heading}>
-            <Text
-              style={{ fontSize: 19, fontWeight: "bold", color: "#f20a0a" }}
-            >
-              Action Required
-            </Text>
-            <Text>count</Text>
-          </View>
-          <View style={styles.ActionRqrd}>
-            <Ionicons name="notifications" style={styles.icon}></Ionicons>
-            <Text style={styles.Notifications}>hello my name is uday</Text>
-          </View>
+          {NotificationData1.map((item, index) => {
+            return (
+              <View style={styles.ActionRqrd} key={index}>
+                <Ionicons name={item.icon} style={styles.icon} />
+                <Text style={styles.Notifications}>{item.desc}</Text>
+              </View>
+            );
+          })}
         </ScrollView>
       </View>
 
@@ -57,11 +76,20 @@ function Notification() {
           <Text style={{ fontSize: 19, fontWeight: "bold", color: "#848484" }}>
             Recent Updates
           </Text>
-          <Text>count</Text>
+          <View
+            style={{
+              paddingHorizontal: 6,
+              paddingVertical: 2,
+              backgroundColor: "#accff7a1",
+
+              borderRadius: 5,
+            }}
+          >
+            <Text style={{ color: "#2c48ffa1" }}>5 New</Text>
+          </View>
         </View>
         {NotificationData2.map((item, index) => {
           return (
-            
             <View style={styles.RecentUptd} key={index}>
               <Ionicons name={item.icon} style={styles.icon} />
               <Text style={styles.Notifications}>{item.desc}</Text>
@@ -113,6 +141,7 @@ const styles = StyleSheet.create({
     backgroundColor: "whitesmoke",
     gap: 10,
     borderRadius: 10,
+    marginBottom: 10,
   },
   RecentUptd: {
     flexDirection: "row",
@@ -126,6 +155,7 @@ const styles = StyleSheet.create({
   },
   icon: {
     fontSize: 20,
+    color: "blue",
   },
   Notifications: {
     fontSize: 15,

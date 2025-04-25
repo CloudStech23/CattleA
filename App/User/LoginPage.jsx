@@ -17,12 +17,12 @@ function LoginPage({ navigation }) {
   // let storeOTP = ''
 
   const handleGetOtp = () => {
-    if (mobile.length === 10) {
-      // setOtpVisible(true);
-      navigation.navigate("HomeTabs");
-    } else {
-      alert("Please enter a valid 10-digit mobile number");
-    }
+    // if (mobile.length === 10) {
+    // setOtpVisible(true);
+    navigation.navigate("HomeTabs");
+    // } else {
+    //   alert("Please enter a valid 10-digit mobile number");
+    // }
     // const randomCode =
     //   Math.floor(Math.random() * 10).toString() +
     //   Math.floor(Math.random() * 10).toString() +
@@ -71,6 +71,15 @@ function LoginPage({ navigation }) {
             <Text style={styles.buttonText}>Get OTP</Text>
           </TouchableOpacity>
         )}
+        <Text
+          style={{
+            color: "red",
+            fontSize: 20,
+            textDecorationLine: "underline",
+          }}
+        >
+          Just click on Get OTP to enter
+        </Text>
 
         {otpVisible && (
           <>

@@ -11,14 +11,25 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
+import * as MediaLibrary from "expo-media-library";
+import * as FileSystem from "expo-file-system";
 
 const imageCategories = [
-  { id: 1, title: "Front Face" },
-  { id: 2, title: "Left Side" },
-  { id: 3, title: "Right Side" },
-  { id: 4, title: "Back Side" },
+  { id: 1, title: "Front-Face" },
+  { id: 2, title: "Left-Side" },
+  { id: 3, title: "Right-Side" },
+  { id: 4, title: "Back-Side" },
   { id: 5, title: "Teeth" },
-  { id: 6, title: "Distinguish Marks" },
+  { id: 6, title: "Distinguish-Marks" },
+  { id: 7, title: "Muzzle" },
+];
+const imageName = [
+  { id: 1, title: "Frontface" },
+  { id: 2, title: "Leftside" },
+  { id: 3, title: "Rightside" },
+  { id: 4, title: "Backside" },
+  { id: 5, title: "Teeth" },
+  { id: 6, title: "Distinguishmarks" },
   { id: 7, title: "Muzzle" },
 ];
 
@@ -27,11 +38,15 @@ function CattleEnrollmentReview() {
   const [selectedImage, setSelectedImage] = useState(null); // Track the selected image for preview
 
   const requestPermission = async () => {
-    const { status } = await ImagePicker.requestCameraPermissionsAsync();
-    if (status !== "granted") {
+    const { status: cameraStatus } =
+      await ImagePicker.requestCameraPermissionsAsync();
+    const { status: mediaStatus } =
+      await MediaLibrary.requestPermissionsAsync();
+
+    if (cameraStatus !== "granted" || mediaStatus !== "granted") {
       Alert.alert(
         "Permission Required",
-        "Camera access is required to take pictures. Please enable it in settings.",
+        "Camera and media access is required to take pictures. Please enable it in settings.",
         [
           { text: "Cancel", style: "cancel" },
           { text: "Open Settings", onPress: () => Linking.openSettings() },
@@ -42,7 +57,27 @@ function CattleEnrollmentReview() {
     return true;
   };
 
-  const openCamera = async (id) => {
+  const getNextFileName = async (title) => {
+    const directoryUri = FileSystem.documentDirectory + "CattleA/"; // Directory where images are stored
+    try {
+      const fileInfo = await FileSystem.readDirectoryAsync(directoryUri);
+
+      // Find files that match the selected title (e.g., "Backside", "Muzzle")
+      const matchingFiles = fileInfo.filter((file) => file.startsWith(title));
+
+      // Get the next index for the title (count of matching files + 1)
+      const nextIndex = matchingFiles.length + 1;
+      const formattedIndex = String(nextIndex).padStart(6, "0");
+      console.log(formattedIndex);
+      const customFilename = `${title}-${formattedIndex}.jpg`; // e.g., Backside-1.jpg, Muzzle-2.jpg
+      return customFilename;
+    } catch (error) {
+      console.error("Error generating filename:", error);
+      return `${title}-1.jpg`; // Default filename if there's an error
+    }
+  };
+
+  const openCamera = async (selectedTitle) => {
     const hasPermission = await requestPermission();
     if (!hasPermission) return;
 
@@ -52,12 +87,52 @@ function CattleEnrollmentReview() {
       quality: 1,
     });
 
-    if (!result.canceled) {
-      Alert.alert("Image Captured", "Your image has been saved successfully.");
-      setStoredImages((prev) => ({
-        ...prev,
-        [id]: result.assets[0].uri, // Store image for this particular category
-      }));
+    if (!result.canceled && result.assets && result.assets.length > 0) {
+      const asset = result.assets[0];
+
+      // Get the next custom filename based on the selected image title (e.g., "Backside", "Muzzle")
+      const customFilename = await getNextFileName(selectedTitle);
+      const newImageUri =
+        FileSystem.documentDirectory + "CattleA/" + customFilename;
+
+      try {
+        if (!asset.uri) {
+          throw new Error("Invalid image URI");
+        }
+
+        // Copy the captured image to the new directory with the custom filename
+        await FileSystem.copyAsync({
+          from: asset.uri,
+          to: newImageUri,
+        });
+
+        // Create an asset for this image to save it to the media library
+        const savedAsset = await MediaLibrary.createAssetAsync(newImageUri);
+
+        // Check if the album exists, otherwise create it
+        const albumName = "CattleA";
+        let album = await MediaLibrary.getAlbumAsync(albumName);
+
+        if (!album) {
+          album = await MediaLibrary.createAlbumAsync(
+            albumName,
+            savedAsset,
+            false
+          );
+        } else {
+          await MediaLibrary.addAssetsToAlbumAsync([savedAsset], album, false);
+        }
+
+        await FileSystem.deleteAsync(asset.uri, { idempotent: true });
+
+        Alert.alert(
+          "Image Saved",
+          `Your image has been saved successfully as ${customFilename}`
+        );
+      } catch (error) {
+        console.error("Error saving to gallery:", error);
+        Alert.alert("Error", "Failed to save image to gallery.");
+      }
     }
   };
 
@@ -74,34 +149,34 @@ function CattleEnrollmentReview() {
       <View style={styles.gridContainer}>
         {imageCategories.map((item) => (
           <View key={item.id} style={styles.box}>
-            {storedImages[item.id] ? (
-              <>
-                {/* Tap image to open full-screen preview */}
-                <TouchableOpacity
+            {/* {storedImages[item.id] ? ( */}
+            <>
+              {/* Tap image to open full-screen preview */}
+              {/* <TouchableOpacity
                   onPress={() => setSelectedImage(storedImages[item.id])}
                 >
                   <Image
                     source={{ uri: storedImages[item.id] }}
                     style={styles.image}
                   />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
 
-                {/* Remove Image Button */}
-                <TouchableOpacity
+              {/* Remove Image Button */}
+              {/* <TouchableOpacity
                   style={styles.removeButton}
                   onPress={() => removeImage(item.id)}
                 >
                   <Text style={styles.removeText}>Remove</Text>
-                </TouchableOpacity>
-              </>
-            ) : (
-              <>
-                <Text style={styles.boxText}>{item.title}</Text>
-                <TouchableOpacity onPress={() => openCamera(item.id)}>
-                  <Ionicons name="camera-outline" size={27} color="white" />
-                </TouchableOpacity>
-              </>
-            )}
+                </TouchableOpacity> */}
+            </>
+            {/* ) : ( */}
+            <>
+              <Text style={styles.boxText}>{item.title}</Text>
+              <TouchableOpacity onPress={() => openCamera(item.title)}>
+                <Ionicons name="camera-outline" size={27} color="white" />
+              </TouchableOpacity>
+            </>
+            {/* )} */}
           </View>
         ))}
       </View>
